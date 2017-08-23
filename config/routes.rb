@@ -5,7 +5,12 @@ Rails.application.routes.draw do
       path: '/',
       type: :user,
       model_name: 'User',
-    }
+    },
+    {
+      path: '/',
+      type: :event,
+      model_name: 'Event',
+    },
   ]
 
   namespace :api do

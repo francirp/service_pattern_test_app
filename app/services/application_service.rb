@@ -37,6 +37,10 @@ class ApplicationService
     'ok'
   end
 
+  def response
+    response_data
+  end
+
   def content_type
     'text/html'
   end

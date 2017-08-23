@@ -15,7 +15,7 @@ Many of these actions have shared behavior:
 - All require serialization of the resource
 - Create and Update need to be able to properly respond with error information when save does not succeed
 - Create and Update rely on decanted params
-- Authorization technique (cancancan)
+- All require authorization (cancancan)
 
 ## Example
 

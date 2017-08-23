@@ -22,7 +22,9 @@ class ServiceFactory
   private
 
   def service_class
-    [namespace, model_module, service_class_name].compact.join('::').constantize
+    klass_name = [namespace, model_module, service_class_name].compact.join('::')
+    return klass_name.constantize if Object.const_defined?(klass_name)
+    default_service
   end
 
   def model_module
@@ -32,5 +34,9 @@ class ServiceFactory
   def service_class_name
     raise 'service is required to be passed into ServiceFactory' unless service.present?
     service.to_s.classify
+  end
+
+  def default_service
+    "Defaults::#{service_class_name}".constantize
   end
 end

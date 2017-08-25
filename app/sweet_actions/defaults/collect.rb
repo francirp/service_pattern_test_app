@@ -1,5 +1,5 @@
 module Defaults
-  class Collect < CollectService
+  class Collect < CollectAction
     def set_resource
       resource_class.all
     end

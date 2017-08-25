@@ -1,5 +1,5 @@
 module Defaults
-  class Destroy < DestroyService
+  class Destroy < DestroyAction
     def destroyed_object
       object = resource_class.find(params[:id])
       object.destroy

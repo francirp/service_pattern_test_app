@@ -1,6 +1,6 @@
 module Api
   module Users
-    class Collect < CollectService
+    class Collect < CollectAction
       def set_resource
         User.all.limit(1)
       end

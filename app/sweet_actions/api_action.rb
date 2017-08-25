@@ -1,10 +1,9 @@
-class ApiService < ApplicationService
-  private
+class ApiAction
+  attr_reader :controller, :response_data, :response_code
 
-  attr_reader :data, :response_code, :response_data
-
-  def content_type
-    'application/json'
+  def initialize(controller, options = {})
+    @controller = controller
+    after_init(options)
   end
 
   def perform_action
@@ -13,8 +12,11 @@ class ApiService < ApplicationService
     end
 
     debug_mode? ? run_action.call : fail_gracefully(run_action)
-    @response_data = @response_data.to_json
   end
+
+  private
+
+  def after_init(options); end
 
   def fail_gracefully(proc)
     @response_code = '200'
@@ -38,6 +40,22 @@ class ApiService < ApplicationService
   end
 
   def action
-    raise "action method is required for #{self.class.name} because it inherits from ApiService"
+    raise "action method is required for #{self.class.name} because it inherits from ApiAction"
+  end
+
+  def path_parameters
+    @path_parameters ||= env['action_dispatch.request.path_parameters']
+  end
+
+  def request
+    @request ||= controller.request
+  end
+
+  def params
+    @params ||= controller.params
+  end
+
+  def env
+    request.env
   end
 end

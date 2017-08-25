@@ -1,4 +1,4 @@
-class CollectService < ApiService
+class CollectAction < ApiAction
   include ReadConcerns
 
   private

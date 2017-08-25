@@ -1,5 +1,5 @@
 module Defaults
-  class Create < CreateService
+  class Create < CreateAction
     def set_resource
       resource_class.new(resource_params)
     end

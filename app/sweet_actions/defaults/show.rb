@@ -1,5 +1,5 @@
 module Defaults
-  class Show < ShowService
+  class Show < ShowAction
     def set_resource
       resource_class.find(params[:id])
     end

@@ -1,5 +1,5 @@
 module Api
-  class RandomAction < ApiService
+  class RandomAction < ApiAction
     def action
       { random: true }
     end

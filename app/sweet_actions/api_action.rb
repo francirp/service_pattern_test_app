@@ -1,4 +1,4 @@
-class ApiService
+class ApiAction
   attr_reader :controller, :response_data, :response_code
 
   def initialize(controller, options = {})
@@ -40,7 +40,7 @@ class ApiService
   end
 
   def action
-    raise "action method is required for #{self.class.name} because it inherits from ApiService"
+    raise "action method is required for #{self.class.name} because it inherits from ApiAction"
   end
 
   def path_parameters

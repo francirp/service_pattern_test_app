@@ -1,5 +1,5 @@
 module Defaults
-  class Update < UpdateService
+  class Update < UpdateAction
     def set_resource
       resource_class.find(params[:id])
     end

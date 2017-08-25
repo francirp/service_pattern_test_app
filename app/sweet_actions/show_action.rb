@@ -1,4 +1,4 @@
-class ShowService < ApiService
+class ShowAction < ApiAction
   include ReadConcerns
 
   def root_key

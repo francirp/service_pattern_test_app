@@ -1,4 +1,4 @@
-# Service Pattern
+# Action Pattern
 
 ## Basic Idea
 
@@ -36,15 +36,15 @@ Destroy: delete '/events/:id'
 
 Each of these will respond with a consistent JSON format, including when saves don't succeed.
 
-## Overriding Default Services
+## Overriding Default Actions
 
-Should you choose to override the default behavior (defined in app/services/defaults/, ), you need only create your own service like so:
+Should you choose to override the default behavior (defined in app/sweet_actions/defaults/, ), you need only create your own action like so:
 
-app/services/events/collect.rb
+app/sweet_actions/events/collect.rb
 
 ```
 module Events
-  class Collect < CollectService
+  class Collect < CollectAction
     def set_resource
       Event.all.limit(10)
     end
@@ -56,11 +56,11 @@ module Events
 end
 ```
 
-app/services/events/create.rb
+app/sweet_actions/events/create.rb
 
 ```
 module Events
-  class Create < CreateService
+  class Create < CreateAction
     def set_resource
       Event.new(resource_params)
     end
@@ -80,11 +80,11 @@ module Events
 end
 ```
 
-app/services/events/show.rb
+app/sweet_actions/events/show.rb
 
 ```
 module Events
-  class Show < ShowService
+  class Show < ShowAction
     def set_resource
       Event.find(params[:id])
     end
@@ -96,11 +96,11 @@ module Events
 end
 ```
 
-app/services/events/update.rb
+app/sweet_actions/events/update.rb
 
 ```
 module Events
-  class Update < UpdateService
+  class Update < UpdateAction
     def set_resource
       Event.find(params[:id])
     end
@@ -116,11 +116,11 @@ module Events
 end
 ```
 
-app/services/events/destroy.rb
+app/sweet_actions/events/destroy.rb
 
 ```
 module Events
-  class Destroy < DestroyService
+  class Destroy < DestroyAction
     def set_resource
       Event.find(params[:id])
     end

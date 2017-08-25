@@ -1,8 +1,8 @@
 class SweetActionsController < ApplicationController
   def action_missing(action_name)
-    factory = ServiceFactory.new(self, action_name)
-    service = factory.build_service
-    service.perform_action
-    render status: service.response_code, json: service.response_data
+    factory = ActionFactory.new(self, action_name)
+    action = factory.build_action
+    action.perform_action
+    render status: action.response_code, json: action.response_data
   end
 end

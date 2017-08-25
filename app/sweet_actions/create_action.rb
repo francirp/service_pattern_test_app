@@ -1,4 +1,4 @@
-class UpdateService < ApiService
+class CreateAction < ApiAction
   include RestConcerns
   include SaveConcerns
 end

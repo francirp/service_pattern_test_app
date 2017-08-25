@@ -1,25 +1,23 @@
 class ServiceFactory
-  def self.call(env)
-    factory = new(env)
-    service = factory.build_service
-    service.http_response
-  end
+  attr_reader :controller, :resource_name, :service, :namespace
 
-  attr_reader :env, :resource_name, :service, :namespace
-
-  def initialize(env)
-    @env = env
+  def initialize(controller, service_name)
+    @controller = controller
     path_parameters = env['action_dispatch.request.path_parameters']
     @resource_name = path_parameters[:resource_name]
-    @service = path_parameters[:service]
+    @service = service_name
     @namespace = path_parameters[:namespace]
   end
 
   def build_service
-    service_class.new(env)
+    service_class.new(controller)
   end
 
   private
+
+  def env
+    controller.request.env
+  end
 
   def service_class
     klass_name = [namespace, resource_module, service_class_name].compact.join('::')
@@ -28,6 +26,7 @@ class ServiceFactory
   end
 
   def resource_module
+    return nil unless resource_name
     resource_name.pluralize
   end
 

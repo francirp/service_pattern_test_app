@@ -1,78 +1,69 @@
 class ApplicationService
-  attr_reader :env, :path_parameters, :request, :body, :query_string_params,
-              :params, :model_name
+  attr_reader :env
 
-  def initialize(env)
+  def initialize(env, options = {})
     @env = env
-    @path_parameters = env['action_dispatch.request.path_parameters']
-    @request = Rack::Request.new(env)
-    @body = pull_body
-    @query_string_params = request.params.with_indifferent_access
-    @params = query_string_params.merge(body).merge(path_parameters)
-    @model_name = path_parameters[:model_name]
-    require_args
-    after_init
+    after_init(options)
   end
 
-  def respond
-    # default hook for subclasses
-    [response_code, response_format, [response]]
+  def http_response
+    perform_action
+    [response_code, response_format, [response_data]]
   end
 
   private
 
-  def after_init
-    # hook
+  def after_init(options); end
+
+  def perform_action
+    # hook for subclasses
+    # wraps the action
+    action
+  end
+
+  def action
+    # hook for subclasses
+    # does majority of the work
+  end
+
+  def content_type
+    raise "content_type method is required for #{self.class.name} because it inherits from ApplicationService"
   end
 
   def response_code
-    @response_code ||= '200'
+    raise "response_code method is required for #{self.class.name} because it inherits from ApplicationService"
+  end
+
+  def response_data
+    raise "response_data method is required for #{self.class.name} because it inherits from ApplicationService"
   end
 
   def response_format
     { 'Content-Type' => content_type }
   end
 
-  def response_data
-    'ok'
+  def path_parameters
+    @path_parameters ||= env['action_dispatch.request.path_parameters']
   end
 
-  def response
-    response_data
+  def request
+    @request ||= Rack::Request.new(env)
   end
 
-  def content_type
-    'text/html'
+  def body
+    @body ||= begin
+      json = request.body.read
+      return {} unless json.present?
+      raw_body = JSON.parse(json)
+      raw_body.is_a?(Hash) ? raw_body.with_indifferent_access : {}
+    end
   end
 
-  def require_args
-    raise "model argument is required for #{self.class.name}" unless model.present?
+  def query_string_params
+    @query_string_params ||= request.params.with_indifferent_access
   end
 
-  def model
-    model_name.constantize
-  end
-
-  def model_decanter
-    @model_decanter ||= "#{model.to_s.classify}Decanter".constantize
-  end
-
-  def model_params
-    @model_params ||= model_decanter.decant(params[singular_key])
-  end
-
-  def plural_key
-    model.name.underscore.pluralize
-  end
-
-  def singular_key
-    model.name.underscore
-  end
-
-  def pull_body
-    json = request.body.read
-    return {} unless json.present?
-    raw_body = JSON.parse(json)
-    raw_body.is_a?(Hash) ? raw_body.with_indifferent_access : {}
+  def params
+    @params ||= query_string_params.merge(body).merge(path_parameters)
   end
 end

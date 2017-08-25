@@ -1,9 +1,13 @@
 module Defaults
   class Update < UpdateService
-    def updated_object
-      object = model.find(params[:id])
-      object.update_attributes(model_params)
-      object
+    def set_resource
+      resource_class.find(params[:id])
+    end
+
+    def authorize; end
+
+    def save
+      resource.update_attributes(resource_params)
     end
   end
 end

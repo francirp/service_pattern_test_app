@@ -11,7 +11,7 @@ module TestApp
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-    paths = ["#{config.root}/app/models/**/", "#{config.root}/lib/**/", "#{config.root}/app/services/**/"]
+    paths = ["#{config.root}/app/models/**/", "#{config.root}/lib/**/"]
     config.autoload_paths   += Dir[*paths]
     config.eager_load_paths += Dir[*paths]
   end

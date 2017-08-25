@@ -1,7 +1,11 @@
 module Defaults
   class Show < ShowService
-    def object
-      model.find(params[:id])
+    def set_resource
+      resource_class.find(params[:id])
+    end
+
+    def authorize
+      # can?(:read, resource)
     end
   end
 end

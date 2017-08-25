@@ -1,7 +1,11 @@
 module Defaults
   class Collect < CollectService
-    def collection
-      model.all
+    def set_resource
+      resource_class.all
+    end
+
+    def authorize
+
     end
   end
 end

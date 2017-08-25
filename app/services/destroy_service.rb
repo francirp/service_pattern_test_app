@@ -1,9 +1,15 @@
 class DestroyService < ApiService
-  def response_data
-    destroyed_object
+  include RestConcerns
+
+  private
+
+  def action
+    @resource = set_resource
+    destroy
+    serialize
   end
 
-  def destroyed_object
-    raise "destroyed_object method must be implemented in #{self.class.name} class"
+  def destroy
+    raise "destroy method must be implemented in #{self.class.name} class since it inherits from DestroyService"
   end
 end

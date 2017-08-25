@@ -1,34 +1,47 @@
 module SaveConcerns
-  def response_data
-    @resource ||= save
-    return failure if errors?
-    success
+  def action
+    @resource = set_resource
+    authorize
+    validate_and_save ? success : failure
+  end
+
+  def root_key
+    singular_key
+  end
+
+  def validate_and_save
+    valid? && save
+  end
+
+  def valid?
+    true
   end
 
   def save
-    raise "save method must be implemented for #{self.class.name} class since it includes SaveConcerns"
+    raise "save method must be implemented by #{self.class.name} since it includes SaveConcerns"
   end
 
   def success
-    serialized_data
+    after_save
+    serialize
   end
 
   def failure
+    after_fail
     @response_code = '422'
+    serialize_errors
+  end
 
-    {
-      errors: {
-        singular_key => map_base_to__error(resource.errors.messages)
-      }
-    }
+  def after_save
+    # hook
+  end
+
+  def after_fail
+    # hook
   end
 
   def map_base_to__error(error_obj)
     error_obj[:_error] = error_obj.delete(:base) if error_obj.key? :base
     error_obj
-  end
-
-  def errors?
-    resource.respond_to?(:errors) && resource.errors.any?
   end
 end

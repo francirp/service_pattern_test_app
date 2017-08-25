@@ -45,8 +45,12 @@ app/services/events/collect.rb
 ```
 module Events
   class Collect < CollectService
-    def collection
+    def set_resource
       Event.all.limit(10)
+    end
+
+    def authorized?
+      can?(:read, resource)
     end
   end
 end
@@ -57,8 +61,20 @@ app/services/events/create.rb
 ```
 module Events
   class Create < CreateService
-    def create
-      Event.create(model_params)
+    def set_resource
+      Event.new(resource_params)
+    end
+
+    def authorized?
+      can?(:create, resource)
+    end
+
+    def save
+      resource.save
+    end
+
+    def after_save
+      SiteMailer.notify_user
     end
   end
 end
@@ -69,8 +85,12 @@ app/services/events/show.rb
 ```
 module Events
   class Show < ShowService
-    def object
+    def set_resource
       Event.find(params[:id])
+    end
+
+    def authorized?
+      can?(:read, resource)
     end
   end
 end
@@ -81,10 +101,16 @@ app/services/events/update.rb
 ```
 module Events
   class Update < UpdateService
-    def updated_object
-      event = Event.find(params[:id])
-      event.update(model_params)
-      event
+    def set_resource
+      Event.find(params[:id])
+    end
+
+    def authorized?
+      can?(:update, resource)
+    end
+
+    def save
+      resource.update(resource_params)
     end
   end
 end
@@ -95,10 +121,16 @@ app/services/events/destroy.rb
 ```
 module Events
   class Destroy < DestroyService
-    def destroyed_object
-      event = Event.find(params[:id])
-      event.destroy
-      event
+    def set_resource
+      Event.find(params[:id])
+    end
+
+    def authorized?
+      can?(:destroy, resource)
+    end
+
+    def destroy
+      resource.destroy
     end
   end
 end

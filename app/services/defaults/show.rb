@@ -4,8 +4,8 @@ module Defaults
       resource_class.find(params[:id])
     end
 
-    def authorize
-      # can?(:read, resource)
+    def authorized?
+      true
     end
   end
 end

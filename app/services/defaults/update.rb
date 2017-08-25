@@ -4,7 +4,9 @@ module Defaults
       resource_class.find(params[:id])
     end
 
-    def authorize; end
+    def authorized?
+      true
+    end
 
     def save
       resource.update_attributes(resource_params)

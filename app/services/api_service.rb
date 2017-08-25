@@ -8,8 +8,6 @@ class ApiService < ApplicationService
   end
 
   def perform_action
-    @response_code = '200'
-
     run_action = Proc.new do
       @response_data = action
     end
@@ -19,8 +17,14 @@ class ApiService < ApplicationService
   end
 
   def fail_gracefully(proc)
+    @response_code = '200'
     begin
       proc.call
+    rescue Exceptions::NotAuthorized => e
+      @response_code = '401'
+      @response_data = {
+        message: 'not authorized'
+      }
     rescue StandardError => e
       @response_code = '500'
       @response_data = {

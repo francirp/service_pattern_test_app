@@ -16,7 +16,6 @@ class ServiceFactory
   end
 
   def build_service
-
     service_class.new(env)
   end
 

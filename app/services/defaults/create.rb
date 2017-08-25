@@ -4,7 +4,8 @@ module Defaults
       resource_class.new(resource_params)
     end
 
-    def authorize
+    def authorized?
+      true
     end
 
     def save

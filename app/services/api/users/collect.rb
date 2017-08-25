@@ -5,8 +5,8 @@ module Api
         User.all.limit(1)
       end
 
-      def authorize
-
+      def authorized?
+        true
       end
     end
   end

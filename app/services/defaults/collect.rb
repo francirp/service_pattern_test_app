@@ -4,8 +4,8 @@ module Defaults
       resource_class.all
     end
 
-    def authorize
-
+    def authorized?
+      true
     end
   end
 end
